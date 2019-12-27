@@ -27,59 +27,19 @@ class IntCode{
     void mult();
     void store(int&);
     void output();
+
     void parse(int&);
+    void read();
 };
 
 inline void IntCode::mult(){
-  option = instruction[2];
-  switch(option){
-    case 0:
-      indexVal = list->at(index+1);
-      valA = list->at(indexVal);
-      break;
-    case 1:
-      valA = list->at(index+1);
-      break;
-  }
-
-  option = instruction[1];
-  switch(option){
-    case 0:
-      indexVal = list->at(index+2);
-      valB = list->at(indexVal);
-      break;
-    case 1:
-      valB = list->at(index+2);
-      break;
-  }
-
+  read();
   indexVal = list->at(index+3);
   list->at(indexVal) = valA * valB;
 }
 
 inline void IntCode::sum(){
-  option = instruction[2];
-  switch(option){
-    case 0:
-      indexVal = list->at(index+1);
-      valA = list->at(indexVal);
-      break;
-    case 1:
-      valA = list->at(index+1);
-      break;
-  }
-
-  option = instruction[1];
-  switch(option){
-    case 0:
-      indexVal = list->at(index+2);
-      valB = list->at(indexVal);
-      break;
-    case 1:
-      valB = list->at(index+2);
-      break;
-  }
-
+  read();
   indexVal = list->at(index+3);
   list->at(indexVal) = valA + valB;
 }
@@ -116,6 +76,30 @@ inline void IntCode::parse(int& op){
 
   instruction[0] = rawInstruction % 10;
   rawInstruction = static_cast<int>(rawInstruction/10);
+}
+
+inline void IntCode::read(){
+  option = instruction[2];
+  switch(option){
+    case 0:
+      indexVal = list->at(index+1);
+      valA = list->at(indexVal);
+      break;
+    case 1:
+      valA = list->at(index+1);
+      break;
+  }
+
+  option = instruction[1];
+  switch(option){
+    case 0:
+      indexVal = list->at(index+2);
+      valB = list->at(indexVal);
+      break;
+    case 1:
+      valB = list->at(index+2);
+      break;
+  }
 }
 
 void IntCode::compute(){
