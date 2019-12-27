@@ -35,60 +35,19 @@ class IntCode{
     void jump(fb2, int&);
 
     void parse(int&);
+    void read();
 };
 
 
 
 inline void IntCode::mult(){
-  option = instruction[2];
-  switch(option){
-    case 0:
-      indexVal = list->at(index+1);
-      valA = list->at(indexVal);
-      break;
-    case 1:
-      valA = list->at(index+1);
-      break;
-  }
-
-  option = instruction[1];
-  switch(option){
-    case 0:
-      indexVal = list->at(index+2);
-      valB = list->at(indexVal);
-      break;
-    case 1:
-      valB = list->at(index+2);
-      break;
-  }
-
+  read();
   indexVal = list->at(index+3);
   list->at(indexVal) = valA * valB;
 }
 
 inline void IntCode::sum(){
-  option = instruction[2];
-  switch(option){
-    case 0:
-      indexVal = list->at(index+1);
-      valA = list->at(indexVal);
-      break;
-    case 1:
-      valA = list->at(index+1);
-      break;
-  }
-
-  option = instruction[1];
-  switch(option){
-    case 0:
-      indexVal = list->at(index+2);
-      valB = list->at(indexVal);
-      break;
-    case 1:
-      valB = list->at(index+2);
-      break;
-  }
-
+  read();
   indexVal = list->at(index+3);
   list->at(indexVal) = valA + valB;
 }
@@ -99,28 +58,7 @@ inline void IntCode::store(int& input){
 }
 
 inline void IntCode::store(fb1 check){
-  option = instruction[2];
-  switch(option){
-    case 0:
-      indexVal = list->at(index+1);
-      valA = list->at(indexVal);
-      break;
-    case 1:
-      valA = list->at(index+1);
-      break;
-  }
-
-  option = instruction[1];
-  switch(option){
-    case 0:
-      indexVal = list->at(index+2);
-      valB = list->at(indexVal);
-      break;
-    case 1:
-      valB = list->at(index+2);
-      break;
-  }
-
+  read();
   indexVal = list->at(index+3);
   if(check(valA, valB)) list->at(indexVal) = 1;
   else list->at(indexVal) = 0;
@@ -140,6 +78,27 @@ inline void IntCode::output(){
 }
 
 inline void IntCode::jump(fb2 check, int& index){
+  read();
+  if(check(valA)) index = valB;
+  else index += 3;
+}
+
+inline void IntCode::parse(int& op){
+  instruction[3] = rawInstruction % 100;
+  rawInstruction = static_cast<int>(rawInstruction/100);
+  op = instruction[3];
+
+  instruction[2] = rawInstruction % 10;
+  rawInstruction = static_cast<int>(rawInstruction/10);
+
+  instruction[1] = rawInstruction % 10;
+  rawInstruction = static_cast<int>(rawInstruction/10);
+
+  instruction[0] = rawInstruction % 10;
+  rawInstruction = static_cast<int>(rawInstruction/10);
+}
+
+inline void IntCode::read(){
   option = instruction[2];
   switch(option){
     case 0:
@@ -161,23 +120,7 @@ inline void IntCode::jump(fb2 check, int& index){
       valB = list->at(index+2);
       break;
   }
-  if(check(valA)) index = valB;
-  else index += 3;
-}
 
-inline void IntCode::parse(int& op){
-  instruction[3] = rawInstruction % 100;
-  rawInstruction = static_cast<int>(rawInstruction/100);
-  op = instruction[3];
-
-  instruction[2] = rawInstruction % 10;
-  rawInstruction = static_cast<int>(rawInstruction/10);
-
-  instruction[1] = rawInstruction % 10;
-  rawInstruction = static_cast<int>(rawInstruction/10);
-
-  instruction[0] = rawInstruction % 10;
-  rawInstruction = static_cast<int>(rawInstruction/10);
 }
 
 void IntCode::compute(){
