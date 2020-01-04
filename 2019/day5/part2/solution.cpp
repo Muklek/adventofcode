@@ -1,3 +1,17 @@
+/*
+ *
+ *
+ *
+ *
+ *  This code optimised on day 9
+ *
+ *
+ *
+ *
+ *
+ * */
+
+
 #include<iostream>
 #include<iostream>
 #include<string>
